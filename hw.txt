@@ -1,0 +1,228 @@
+Homework 1 to Machine Learning 101 : Answers by Eugene Koontz (ekoontz@hiro-tan.org)
+
+1
+
+a) "Determine whether each of the two attributes (columns) is treated
+as qualitative (categorical) or quantitative (numeric) using
+R. Explain how you can tell using R."
+
+First column is quantitative; the second is qualitative:
+
+I can tell the first column is quantitative because sum() works:
+
+> sum(data[1])
+[1] 3186
+
+I can tell the second column is qualitative because sum() doesn't work:
+
+> sum(data[2])
+Error in FUN(X[[1L]], ...) : 
+    only defined on a data frame with all numeric variables
+
+and thus not all values are numeric.
+
+b) "What is the specific problem that causes one of these two
+attributes to be read in as qualitative (categorical) when it seems it
+should be quantitative (numeric)?"
+
+There's a "two" in the second column.
+
+c) "Use the command plot() in R to make a plot for each column by
+entering plot(data[,1]) and plot(data[,2]). Because one variable is
+read in as quantitative (numeric) and the other as qualitative
+(categorical) these two plots are showing completely different things
+by default. Explain exactly what is being plotted in each of the two
+cases. Include these two plots in your homework."
+
+In plot(data[,1]), the first column's values are being displayed as
+the range, with the row index as the domain. 
+In plot(data[,2]), a histogram is being generated for all the possible
+values in the second column.
+
+
+d) "Read the data into Excel. Excel should have no problem opening the
+file directly since it is .csv. Create a new column that is equal to
+the second column plus 10. What is the result for the problem
+observations (rows) you identified in part b? What specific outcome
+does Excel display?"
+
+Outlook displays: "#VALUE!".
+
+2) 
+
+a) "Read the data into R using data<-
+read.csv("twomillion.csv",header=FALSE)...Extract a
+simple random sample with replacement of 10,000 observations
+(rows). Show your R commands for doing this."
+
+> samp <- sample(data[,1],10000,TRUE)
+
+b) "For your sample, use the functions mean(), max(), var() and
+quantile(,.25) to compute the mean, maximum, variance and 1st quartile
+respectively. Show your R code and the resulting values."
+
+> mean(samp)
+[1] 9.470383
+> max(samp)
+[1] 16.3303
+> var(samp)
+[1] 4.004343
+> quantile(samp,.25)
+     25% 
+8.128114 
+
+
+c)"Compute the same quantities in part b on the entire data set and show
+your answers. How much do they differ from your answers in part b?"
+
+> mean(data[,1])
+[1] 9.451468
+> max(data[,1])
+[1] 18.96657
+> var(data[,1])
+[1] 4.001822
+> quantile(data[,1],.25)
+    25% 
+8.10388 
+> 
+
+The max differs by a lot; the others, not so much difference.
+
+d) Excel question..
+
+e) Assuming Excel fails somehow.
+
+3. "This question uses a sample of 1500 California house prices.."
+
+a) "Use R to produce a single graph displaying a boxplot for each set" 
+
+> oh_prices<- read.csv("OH_house_prices.csv",header=FALSE)
+> ca_prices<- read.csv("CA_house_prices.csv",header=FALSE)
+> boxplot(ca_prices[,1],oh_prices[,1],col="blue", 
+           main=" House Boxplot ", names=c("CA houses","Ohio houses"),ylab="Prices")
+
+b) "Use R to produce a frequency histogram for only the California
+house prices. Use intervals of width $500,000 beginning at 0 and
+ending at $3.5 million. Include the R commands and the plot. Put your
+name in the title of the plot."
+
+> hist(ca_prices[,1],c(500*0:7),main = "House prices in California by Group J")
+
+c) Use R to plot the ECDF of the California houses and Ohio houses on
+the same graph (see example2.r). Include a legend. Include the R
+commands and the plot. Put your name in the title of the plot."
+
+> plot(ecdf(ca_prices[,1]),col="black",main="ECDF of CA and OH House Prices by Group J")
+> par(new=TRUE)
+> plot(ecdf(oh_prices[,1]),col="red",main="")
+
+4.  
+
+a) "Use plot() in R to make a scatter plot for this data with 2003
+wins on the x- axis and 2004 wins on the y-axis. Use the range 0 to 12
+for both the x-axis and y-axis. Include the R commands and the
+plot. Put your name in the title of the plot."
+
+> wins <- read.csv('football.csv') 
+> plot(wins[,2],wins[,3],xlab="2003 wins",ylab="2004 wins",main="Group J")
+
+b) "Why are there fewer than 117 points visible on your graph in part
+a? Describe the solution we discussed in class to deal with this
+problem (but don't actually do it)."
+
+Don't remember the solution discussed in class; maybe use a third dimension or coloring
+to show counts for same (2003 wins,2004 wins) value?
+
+c) "Compute the correlation in R using the function cor()."
+
+> cor(wins[,2],wins[,3])
+[1] 0.6537691
+
+d) "How does the value in part c change if you add 10 to all the values for 2004?"
+
+> cor(wins[,2],wins[,3] + 10)
+[1] 0.6537691
+
+Not at all.
+
+e) "How does the value in part c change if you multiply all the 2004 values by 2?"
+
+> cor(wins[,2],wins[,3] * 2)
+[1] 0.6537691
+
+Not at all.
+
+f) "How does the value in part c change if you multiply all the 2004 values by -2?"
+
+> cor(wins[,2],wins[,3] * -2)
+[1] -0.6537691
+> 
+
+Same magnitude but negative.
+
+5. "This question uses the sample of 10,000 Ohio house prices"
+
+a) "What is the median value? Is it larger or smaller than the mean?"
+
+> oh_house_prices <- read.csv('OH_house_prices.csv')
+> median(oh_house_prices[,1])
+[1] 118
+> mean(oh_house_prices[,1])
+[1] 190.3132
+
+The mean is larger.
+
+b) "What does your answer to part a suggest about the shape of the
+distribution (right-skewed or left-skewed)?"
+
+It is left-skewed : more houses are less than the mean than are above it.
+
+c) "How does the median change if you add 10 (thousand dollars) to all the values?"
+
+> median(oh_house_prices[,1]+10)
+[1] 128
+
+It increases by exactly 10 dollars.
+
+d) "How does the median change if you multiply all the values by 2?"
+
+> median(oh_house_prices[,1]*2)
+[1] 236
+
+It increases by a bit less than twice.
+
+5. " This question uses the following people's ages: 19,23,30,30,45,25,24,20."
+a) "Compute the standard deviation in R using the sd() function."
+
+> sd(ages)
+[1] 8.315218
+
+b) "Compute the same value by hand and show all the steps."
+
+> mean(ages)
+[1] 27
+> ages - mean(ages)
+[1] -8 -4  3  3 18 -2 -3 -7
+> (ages - mean(ages))^2
+[1]  64  16   9   9 324   4   9  49
+> sum((ages - mean(ages))^2)
+[1] 484
+> sum((ages - mean(ages))^2)/length(ages)
+[1] 60.5
+> sqrt(sum((ages - mean(ages))^2)/length(ages))
+[1] 7.778175
+
+c) "Using R, how does the value in part a change if you add 10 to all the values?"
+
+> sd(ages+10)
+[1] 8.315218
+
+No change.
+
+d) "Using R, how does the value in part a change if you multiply all the values by 100?"
+
+> sd(ages * 100)
+[1] 831.5218
+
+Increases by 100.
+
