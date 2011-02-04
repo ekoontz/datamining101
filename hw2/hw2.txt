@@ -1,0 +1,82 @@
+1.  "For binary classification, consider the training examples in the
+table below (shown in Table 4.8 from the book on page 198). For column
+a3, which is a continuous attribute, compute the misclassification
+rate for every possible split."
+
+> missclassrate
+function (split_at, a3, target_class) {
+
+  # number of times that target_class is '-' is true when a3 < split_at.
+  left_c0 <- sum(
+               mapply(
+                  function(x,y) 
+                     if (x < split_at) { 
+                         if (y == '-') 1
+                         else 0
+                     } else {
+                         0
+                     },a3,target_class))
+
+  # number of times that target_class is '+' is true when a3 < split_at.
+  left_c1 <- sum(
+               mapply(
+                  function(x,y) 
+                     if (x < split_at) { 
+                         if (y == '+') 1
+                         else 0
+                     } else {
+                         0
+                     },a3,target_class))
+
+  # number of times that target_class is '-' is true when a3 => split_at.
+  right_c0 <- sum(
+               mapply(
+                  function(x,y) 
+                     if (x >= split_at) { 
+                         if (y == '-') 1
+                         else 0
+                     } else {
+                         0
+                     },a3,target_class))
+
+  # number of times that target_class is '+' is true when a3 >= split_at.
+  right_c1 <- sum(
+               mapply(
+                  function(x,y) 
+                     if (x >= split_at) { 
+                         if (y == '+') 1
+                         else 0
+                     } else {
+                         0
+                     },a3,target_class))
+
+prob_c0_given_split = left_c0 / ( left_c0 + right_c0 )
+prob_c1_given_split = left_c1 / ( left_c1 + right_c1 )
+
+max(c(prob_c0_given_split, prob_c1_given_split))
+
+}
+
+> missclassrate(2.0, a3, target_class)
+[1] 0.25
+> missclassrate(3.0, a3, target_class)
+[1] 0.25
+> missclassrate(4.0, a3, target_class)
+[1] 0.25
+> missclassrate(5.0, a3, target_class)
+[1] 0.5
+> missclassrate(6.0, a3, target_class)
+[1] 0.6
+> missclassrate(7.0, a3, target_class)
+[1] 0.75
+> missclassrate(8.0, a3, target_class)
+[1] 1
+> 
+
+
+"Next compute the information gain for every possible split of that
+ same variable."  
+
+"Which of these splits considered is the best according to
+ misclassification error rate? Is that split also the best when
+ considering information gain?"
